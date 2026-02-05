@@ -1,0 +1,36 @@
+from FORMULAE import *
+
+def make_accel_list(seg, n, a, dx_list): # Create list of accelerations from some apex point at every node
+    span = seg.indices()[1] - seg.indices()[0]
+    shift = seg.indices()[0]
+
+    v = seg.aps()
+
+    accel = []
+    for i in range(n):
+        if i > span:
+            if (i + shift) < n:
+                v = accelerate(v, dx_list[i + shift], a)
+            else:
+                v = accelerate(v, dx_list[i + shift - n], a)
+        accel.append(float(v))
+    accel = accel[n - shift:] + accel[:n - shift]
+    return accel
+
+def make_decel_list(seg, n, a, dx_list): # Create list of decelerations from some apex point at every node
+    span = seg.indices()[1] - seg.indices()[0]
+    shift = seg.indices()[1] + 1
+
+    v = seg.aps()
+
+    decel = []
+    for i in range(n):
+        if i > span:
+            if (shift - i) < 0:
+                v = accelerate(v, dx_list[shift - i + n], a)
+            else:
+                v = accelerate(v, dx_list[shift - i], a)
+        decel.append(float(v))
+    decel = decel[::-1]
+    decel = decel[n - shift:] + decel[:n - shift]
+    return decel

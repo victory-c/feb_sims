@@ -1,4 +1,4 @@
-# Formula Electric at Berkeley: Simulations Project | 2026
+# Formula Electric at Berkeley: Simulations Project | Spring 2026
 
 A Lap Time Simulation requires:
 * Vehicle Modeling
@@ -59,4 +59,17 @@ The Steady-State Algorithm:
 	* The algorithm must calculate the acceleration and deceleration velocity of each node (location on track) for every single apex (track curve).
 	* Closed tracks require looping back to the first/last point.
 
-See main.py for a simple simulation using the above concepts.
+See ver1.py for a basic implementation of the simulation using the above concepts.
+
+___
+
+
+Vehicle Modeling:
+* Axes conventions generally follow the right-hand rule. Important axes to consider:
+	* x: Forward-Backward
+	* y: Left-Right
+	* z: Up-Down
+	* Theta: y angle (downhill)
+	* Phi: x angle (right)
+	* Omega: z angle (left)
+

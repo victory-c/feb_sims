@@ -163,7 +163,7 @@ for i in range(num_nodes):
     time += dx_list[i] / vel[i]
 print(f"Laptime: {time:.3f} seconds")
 
-"""fig = plt.figure()
+fig = plt.figure()
 ax = plt.axes()
 ax.plot(vel)
-plt.show()"""
+plt.show()
