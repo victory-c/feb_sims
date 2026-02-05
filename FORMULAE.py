@@ -6,3 +6,4 @@ def find_apex_speed(r, a): # Formula for apex speed
 
 def accelerate(v_i, dx, a): # Formula for acceleration
     return np.sqrt(v_i ** 2 + 2 * a * dx)
+

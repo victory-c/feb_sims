@@ -1,5 +1,6 @@
 from FORMULAE import *
 
+# Distance-Based Simulations
 def make_accel_list(seg, n, a, dx_list): # Create list of accelerations from some apex point at every node
     span = seg.indices()[1] - seg.indices()[0]
     shift = seg.indices()[0]
@@ -34,3 +35,12 @@ def make_decel_list(seg, n, a, dx_list): # Create list of decelerations from som
     decel = decel[::-1]
     decel = decel[n - shift:] + decel[:n - shift]
     return decel
+
+def straight_line_accel(a, n, dx_list): # Accelerate from rest
+    v = 0
+
+    accel = []
+    for i in range(n):
+        v = accelerate(v, dx_list[i], a)
+        accel.append(float(v))
+    return accel

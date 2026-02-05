@@ -1,0 +1,2 @@
+G = 9.81
+MAX_ACCEL = G

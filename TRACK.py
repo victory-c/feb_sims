@@ -1,23 +1,27 @@
 from FORMULAE import *
+from VEHICLE import *
 
 class Segment:
     length = 0
     radius = 0
-    turn = False
+    direction = 0
 
     start_index = 0
     end_index = 0
 
     apex_speed = 0
 
-    def __init__(self, l, r, a):
+    def __init__(self, l, r):
         assert isinstance(l, int), "first argument must be int"
         assert isinstance(r, int), "second argument must be int"
         self.length = l
-        self.radius = r
+        self.radius = abs(r)
+        if self.radius < 0:
+            self.direction = -1
+        elif self.radius > 0:
+            self.direction = 1
         if self.radius != 0:
-            self.turn = True
-            self.apex_speed = find_apex_speed(self.radius, a)
+            self.apex_speed = find_apex_speed(self.radius, MAX_ACCEL)
     
     def __len__(self):
         return self.length
@@ -26,7 +30,7 @@ class Segment:
         return self.radius
 
     def is_turn(self):
-        return self.turn
+        return bool(self.radius)
     
     def aps(self):
         return self.apex_speed
@@ -43,12 +47,12 @@ class Segment:
 # CLOSED = True 
 # TODO: Implement logic for open tracks 
 
+
+
 NODE_LEN = 1
 
-
-
 # Helper Methods
-def split_nodes(track): # Separating velocity tracking nodes
+def split_nodes(track): # Separating velocity tracking nodes for distance-based velocity tracking
     nodes = [0]
     track_len = 0
     for seg in track:

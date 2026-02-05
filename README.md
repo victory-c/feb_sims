@@ -54,7 +54,7 @@ The Steady-State Algorithm:
 * How the algorithm works:
 	* The algorithm simulates the acceleration out of and deceleration into turns continuously for every single point on the track.
 	* Then, the algorithm chooses the minimum value of velocity at each point as the optimal velocity of the vehicle.
-* Key findings for the steady-state model:
+* Key findings for the steady-state model	
 	* The algorithm needs a vehicle and track model.
 	* The algorithm must calculate the acceleration and deceleration velocity of each node (location on track) for every single apex (track curve).
 	* Closed tracks require looping back to the first/last point.
@@ -64,12 +64,18 @@ See ver1.py for a basic implementation of the simulation using the above concept
 ___
 
 
-Vehicle Modeling:
-* Axes conventions generally follow the right-hand rule. Important axes to consider:
-	* x: Forward-Backward
-	* y: Left-Right
-	* z: Up-Down
-	* Theta: y angle (downhill)
-	* Phi: x angle (right)
-	* Omega: z angle (left)
+Track Modeling:
+* Current track model considers:
+	* Section Length
+	* Turn Radius
+	* Curve Direction
+	* Assumes flat tracks with no banking or elevation.
+* Includes function for splitting velocity-tracking nodes based on distance.
+* Accurate logic for managing straights and turns, including tracking apex speeds and segment indices.
 
+
+Simulation:
+* Current simulation includes:
+	* Acceleration lists out of all turns
+	* Deceleration lists into all turns
+	* Acceleration from rest
