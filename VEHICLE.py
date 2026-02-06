@@ -125,5 +125,3 @@ def force_x(v, r):
     return force_tractive(v, r) - F_aero(v) - F_roll
 
 accel_x = lambda v, r: force_x(v, r) / M
-
-MAX_ACCEL = G

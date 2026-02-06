@@ -1,5 +1,7 @@
 # Formula Electric at Berkeley: Simulations Project | Spring 2026
 
+<h2>General Lap Sim Theory</h2>
+
 A Lap Time Simulation requires:
 * Vehicle Modeling
 * Track Modeling
@@ -17,7 +19,7 @@ Lap Time Theory:
 	* Vehicle states are time dependent.
 	* Requires historical vehicle data to solve equations.
 	* Complicated and slow.
-The steady-state model will be used as a starting point.
+* The sections below detail how to build a very simple steady-state simulation.
 
 
 Vehicle Theory:
@@ -27,7 +29,6 @@ Vehicle Theory:
 		* Which means the vehicle is rarely not accelerating in any direction.
 	* The larger the circle, the faster the car.
 	* The plotted accelerations of any vehicle would collapse approximately into a circle/ellipse, which dictate the maximum value of acceleration in any one direction.
-* This will be replaced by an actual vehicle model later on.
 
 
 Track Theory:
@@ -35,7 +36,6 @@ Track Theory:
 	* When the track curves, the radius has some real number.
 	* When the track goes straight, the radius is infinite.
 	* Directionality does not matter.
-* This will also be replaced by an actual track model later on.
 
 
 The Steady-State Algorithm:
@@ -63,34 +63,53 @@ See basic.py for a basic implementation of the simulation using the above concep
 
 ___
 
+<h2>Features of the Lap Sim included in this repository</h2>
 
 Track Modeling:
-* Current track model considers:
+* The current track model is a simple model only considering:
 	* Section Length
 	* Turn Radius
-	* Curve Direction
-	* Assumes flat tracks with no banking or elevation.
-* Includes function for splitting velocity-tracking nodes based on distance.
-* Accurate logic for managing straights and turns, including tracking apex speeds and segment indices.
-* Stored in TRACK.py
+* The model assumes flat tracks with no banking or elevation.
+* A full track is built from distinct curve and straight sections, built with the Segment class.
+* The model includes the `split_nodes()` function, splitting velocity-tracking nodes based on a uniform distance `NODE_LEN`.
+* Each Segment object accurately the start and end indices of the length of track after splitting, as well as saving an 'apex speed' based on radius for all turns.
+* The full track model is stored in TRACK.py.
 
 
 Vehicle Modeling:
-* Current vehicle model contains:
-	* External forces, including the normal, drag, and rolling friction forces
-	* A powertrain setup including RPM calculation and engine force calculation using torque interpolation
-	* Full consideration of GG circle force limits, including lateral and longitudinal forces
-* Outputs simulated acceleration values (based on current velocity and turn radius values).
-* Stored in VEHICLE.py
+* The full vehicle model tracks:
+	* External forces, including the normal, drag, and rolling friction forces.
+		* Each force is determined with relevant constants and adjustable values of frontal area, drag coefficient, and rolling coefficient.
+		* The drag (aerodynamic) force varies with velocity.
+	* A powertrain setup calculating both RPM and engine force.
+		* Both RPM and engine force are calculated with relevant constants and adjustable drive (gear) ratio (assuming no gear shifting), powertrain efficiency, maximum engine power, and tire radius values.
+		* Engine torque is determined through interpolation based on preexisting motor-torque curves.
+	* Lateral and longitudinal forces and accelerations.
+		* Forces vary based on engine and external forces detailed above.
+		* Lateral and longitudinal forces are subject to limits based on an adjustable friction coefficient.
+* The model assumes no lift, no gear shift, and an AWD vehicle.
+* Output acceleration values depend upon current velocity and turn radius values.
+* The full vehicle model is stored in VEHICLE.py.
 
 Formulae:
-* Physics formulas for determining apex speed, covered distance (based on current velocity and acceleration), power, and energy included.
-* Stored in FORMULAE.py
+* The formula document stores common physics formulas needed for specific calculations across the full simulation.
+* These include:
+	* `find_apex_speed()`: Determines a turn segment's constant velocity based on the maximum frictional force and turn radius.
+	* `travel()`: A function simulating the vehicle moving to the next distance-tracking node based on its current velocity and acceleration value.
+	* `power()`: Outputs the power use of the vehicle based on its tractive (engine) force, current velocity, and powertrain efficiency.
+	* `energy()`: Sums the full power use of the vehicle over the track and outputs an energy value in kilowatt-hours.
+* All above formulas are stored in FORMULAE.py.
 
 Full Lap Simulation:
-* Current simulation considers:
-	* Accelerate from Rest: Velocity of vehicle accelerating from rest
-	* Negotiate Turns: Velocity of vehicle decelerating into, maintaining an apex speed in, and accelerating out of turns
-* Simulation finds the floor of all such lists (accelerate from rest and all turns) and selects the minimum as the ideal velocity.
-* Simulation outputs the total lap time.
-* Simulation also create graphs depicting velocity over time, velocity over distance, and all velocity lists over time.
+* The current iteration of the lap simulation functions as follows:
+	1. The simulation determines all necessary actions of throttling and braking. This includes:
+		* Accelerating from Rest: The vehicle accelerates from rest until it is drag-limited or gear-limited, at which point it is unable to accelerate further.
+		* Negotiate Turns: The vehicle decelerates into a turn, maintains a constant speed on the curve, and accelerates out of the curve. 
+	2. The simulation collects all such lists and selects the minimum as the true vehicle velocity.
+	3. The simulation sums together a time value by dividing inter-node distance by their respective velocities. It outputs the final laptime as the primary end goal of the simulation.
+	4. The simulation also generates graphs depicting relevant vehicle and lap statistics. This currently includes: 
+		* Velocity (m/s) vs. time (s)
+		* Velocity (m/s) vs. distance (m) 
+		* All velocity lists (m/s) vs. time (s)
+* The functions generating each velocity list can be found at SIMUL.py.
+* A general version of the lap sim on a simplified track can be found at test_track.py.
