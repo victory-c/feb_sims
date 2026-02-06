@@ -79,3 +79,4 @@ Simulation:
 	* Acceleration lists out of all turns
 	* Deceleration lists into all turns
 	* Acceleration from rest
+* Takes minimum velocity from all lists.

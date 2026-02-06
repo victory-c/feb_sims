@@ -7,9 +7,9 @@ from SIMUL import *
 
 # Track
 STR1 = Segment(500, 0)
-TURN1 = Segment(int(1/2 * 2 * np.pi * 50), 50)
+# TURN1 = Segment(int(1/2 * 2 * np.pi * 50), 50)
 
-TRACK = [STR1, TURN1]
+TRACK = [STR1]
 TRACK_LEN = sum([len(track) for track in TRACK])
 print(TRACK_LEN)
 
@@ -24,9 +24,9 @@ num_nodes = len(nodes)
 vel_list = [] # Collecting apex speeds
 for seg in TRACK:
     if seg.is_turn():
-        vel_list.append(make_accel_list(seg, num_nodes, MAX_ACCEL, dx_list))
-        vel_list.append(make_decel_list(seg, num_nodes, MAX_ACCEL, dx_list))
-vel_list.append(straight_line_accel(MAX_ACCEL, num_nodes, dx_list))
+        vel_list.append(make_accel_list(seg, num_nodes, accel_x, dx_list))
+        vel_list.append(make_decel_list(seg, num_nodes, accel_x, dx_list))
+vel_list.append(straight_line_accel(accel_x, num_nodes, dx_list))
 vel_list = np.array(vel_list)
 
 vels = []
@@ -58,9 +58,9 @@ ax[1].set(title="Velocity (m/s) vs. Time (s) (All values)",
        xlabel="Time (s)",
        ylabel="Velocity (m/s)")
 ax[1].grid()
-ax[1].plot(time_list, vel_list[0], 'g', label="Acceleration Velocity")
-ax[1].plot(time_list, vel_list[1], 'r', label="Deceleration Velocity")
-ax[1].plot(time_list, vel_list[2], 'b', label="Straight-Line Velocity")
+# ax[1].plot(time_list, vel_list[0], 'g', label="Acceleration Velocity")
+# ax[1].plot(time_list, vel_list[1], 'r', label="Deceleration Velocity")
+# ax[1].plot(time_list, vel_list[2], 'b', label="Straight-Line Velocity")
 ax[1].plot(time_list, vels, 'o-k', ms=2.5, label = "Final Velocity")
 ax[1].legend()
 
