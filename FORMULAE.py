@@ -1,11 +1,11 @@
 import numpy as np
 from VEHICLE import *
 
-def find_apex_speed(r, a): # Formula for apex speed
+def find_apex_speed(r): # Formula for apex speed
     assert isinstance(r, int), "radius must be an integer" 
-    return np.sqrt(a * r)
+    return np.sqrt(force_max / M * r)
 
-def accelerate(v_i, dx, a): # Formula for acceleration
+def travel(v_i, a, dx): # Formula for distance covered using acceleration
     return np.sqrt(v_i ** 2 + 2 * a * dx)
 
 def power(v, r): # in kilowatts

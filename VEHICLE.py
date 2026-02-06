@@ -20,7 +20,7 @@ FRONTAL_AREA = 1
 
 # Drivetrain
 DRIVETRAIN_EFFICIENCY = 0.9
-RPM_MAX = 5500 # assumption
+RPM_MAX = 6500 # assumption
 POWER_MAX = 80000
 
 # Tire Analysis 
@@ -85,6 +85,7 @@ torque_interp = CubicSpline(MOTOR_TORQUE_CURVE[:, 0], MOTOR_TORQUE_CURVE[:, 1])
 # External Forces (assuming no lift)
 F_m = -1 * M * G
 F_z_total = -1 * F_m 
+force_max = F_z_total * CF
 
 F_aero = lambda v: 1 / 2 * RHO * FRONTAL_AREA * CD * v ** 2 # drag force
 F_roll = CR * abs(F_m) # rolling resistance
@@ -106,10 +107,6 @@ def force_engine(v):
         
 
 # Full Acceleration
-force_max = F_z_total * CF
-
-
-
 def force_y(v, r):
     if r < 1.0: 
         return 0

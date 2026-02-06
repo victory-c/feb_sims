@@ -1,48 +1,34 @@
 from FORMULAE import *
 
-# Distance-Based Simulations
-def make_accel_list(seg, n, a, dx_list): # Create list of accelerations from some apex point at every node
-    span = seg.indices()[1] - seg.indices()[0]
-    shift = seg.indices()[0]
+def setup(seg):
+    return seg.rad(), seg.indices()[0], seg.indices()[1] - seg.indices()[0]
 
-    v = seg.aps()
-    r = seg.rad()
-
-    accel = []
-    for i in range(n):
-        if i > span:
-            if (i + shift) < n:
-                v = accelerate(v, dx_list[i + shift], a(v, r))
-            else:
-                v = accelerate(v, dx_list[i + shift - n], a(v, r))
-        accel.append(float(v))
-    accel = accel[n - shift:] + accel[:n - shift]
-    return accel
-
-def make_decel_list(seg, n, a, dx_list): # Create list of decelerations from some apex point at every node
-    span = seg.indices()[1] - seg.indices()[0]
-    shift = seg.indices()[1] + 1
-
-    v = seg.aps()
-    r = seg.rad()
-
-    decel = []
-    for i in range(n):
-        if i > span:
-            if (shift - i) < 0:
-                v = accelerate(v, dx_list[shift - i + n], a(v, r))
-            else:
-                v = accelerate(v, dx_list[shift - i], a(v, r))
-        decel.append(float(v))
-    decel = decel[::-1]
-    decel = decel[n - shift:] + decel[:n - shift]
-    return decel
-
-def straight_line_accel(a, n, dx_list): # Accelerate from rest
+def accelerate_from_rest(dx_list):
     v = 0
 
-    accel = []
-    for i in range(n):
-        v = accelerate(v, dx_list[i], a(v, 0))
-        accel.append(float(v))
-    return accel
+    accel_list = []
+    for dx in dx_list:
+        v = travel(v, accel_x(v, 0), dx)
+        accel_list.append(v)
+    
+    return accel_list
+
+def negotiate_turns(seg, dx_list):
+    r, shift, span = setup(seg)
+    v = seg.aps()
+
+    apex_speed_list = [1000] * len(dx_list)
+    v_f = v
+    for i in range(shift, len(dx_list)):
+        if i <= shift + span:
+            apex_speed_list[i] = v
+        else:
+            v_f = travel(v_f, accel_x(v, 0), dx_list[i])
+            apex_speed_list[i] = v_f
+    
+    v_b = v
+    for i in range(shift - 1, -1, -1):
+        v_b = travel(v_b, accel_x(v, 0), dx_list[i])
+        apex_speed_list[i] = v_b
+    
+    return apex_speed_list

@@ -21,7 +21,7 @@ class Segment:
         elif self.radius > 0:
             self.direction = 1
         if self.radius != 0:
-            self.apex_speed = find_apex_speed(self.radius, MAX_ACCEL)
+            self.apex_speed = find_apex_speed(self.radius)
     
     def __len__(self):
         return self.length
@@ -58,8 +58,7 @@ def split_nodes(track): # Separating velocity tracking nodes for distance-based 
     for seg in track:
         seg_len = 0
         
-        if seg.is_turn():
-            seg.set_start_index(len(nodes))
+        seg.set_start_index(len(nodes))
         
         while (seg_len < len(seg)):
             seg_len += NODE_LEN
@@ -68,14 +67,13 @@ def split_nodes(track): # Separating velocity tracking nodes for distance-based 
             else:
                 nodes.append(track_len + seg_len)
         
-        if seg.is_turn():
-            seg.set_end_index(len(nodes) - 2)
+        seg.set_end_index(len(nodes) - 2)
         
         track_len += len(seg)
     nodes = nodes[:-1]
 
-    dx = [0]
+    dx_list = [0]
     for i in range(1, len(nodes)):
-        dx.append(nodes[i] - nodes[i-1])
+        dx_list.append(nodes[i] - nodes[i-1])
 
-    return nodes, dx
+    return nodes, dx_list

@@ -59,7 +59,7 @@ The Steady-State Algorithm:
 	* The algorithm must calculate the acceleration and deceleration velocity of each node (location on track) for every single apex (track curve).
 	* Closed tracks require looping back to the first/last point.
 
-See ver1.py for a basic implementation of the simulation using the above concepts.
+See basic.py for a basic implementation of the simulation using the above concepts.
 
 ___
 
@@ -72,11 +72,25 @@ Track Modeling:
 	* Assumes flat tracks with no banking or elevation.
 * Includes function for splitting velocity-tracking nodes based on distance.
 * Accurate logic for managing straights and turns, including tracking apex speeds and segment indices.
+* Stored in TRACK.py
 
 
-Simulation:
-* Current simulation includes:
-	* Acceleration lists out of all turns
-	* Deceleration lists into all turns
-	* Acceleration from rest
-* Takes minimum velocity from all lists.
+Vehicle Modeling:
+* Current vehicle model contains:
+	* External forces, including the normal, drag, and rolling friction forces
+	* A powertrain setup including RPM calculation and engine force calculation using torque interpolation
+	* Full consideration of GG circle force limits, including lateral and longitudinal forces
+* Outputs simulated acceleration values (based on current velocity and turn radius values).
+* Stored in VEHICLE.py
+
+Formulae:
+* Physics formulas for determining apex speed, covered distance (based on current velocity and acceleration), power, and energy included.
+* Stored in FORMULAE.py
+
+Full Lap Simulation:
+* Current simulation considers:
+	* Accelerate from Rest: Velocity of vehicle accelerating from rest
+	* Negotiate Turns: Velocity of vehicle decelerating into, maintaining an apex speed in, and accelerating out of turns
+* Simulation finds the floor of all such lists (accelerate from rest and all turns) and selects the minimum as the ideal velocity.
+* Simulation outputs the total lap time.
+* Simulation also create graphs depicting velocity over time, velocity over distance, and all velocity lists over time.
