@@ -84,11 +84,12 @@ torque_interp = CubicSpline(MOTOR_TORQUE_CURVE[:, 0], MOTOR_TORQUE_CURVE[:, 1])
 
 # External Forces (assuming no lift)
 F_m = -1 * M * G
-F_z_total = -1 * F_m 
-force_max = F_z_total * CF
+F_lift = lambda v: 1 / 2 * RHO * FRONTAL_AREA * CL * v ** 2 # lift/downforce
+F_z_total = lambda v: F_m + F_lift(v)
+force_max = lambda v: abs(F_z_total(v)) * CF
 
-F_aero = lambda v: 1 / 2 * RHO * FRONTAL_AREA * CD * v ** 2 # drag force
-F_roll = CR * abs(F_m) # rolling resistance
+F_drag = lambda v: 1 / 2 * RHO * FRONTAL_AREA * CD * v ** 2 # drag force
+F_roll = lambda v: CR * abs(F_z_total(v)) # rolling resistance
 
 # Powertrain
 def rpm(v):
@@ -113,15 +114,15 @@ def force_y(v, r):
     else:
         return M * v ** 2 / r
 
-accel_y = lambda v, r: min(force_max, force_y(v, r) / M)
+accel_y = lambda v, r: min(force_max(v), force_y(v, r) / M)
 
 
 
-force_tract_limit = lambda v, r: max(0, np.sqrt(force_max ** 2 - force_y(v, r) ** 2))
+force_tract_limit = lambda v, r: max(0, np.sqrt(force_max(v) ** 2 - force_y(v, r) ** 2))
 
 force_tractive = lambda v, r: min(force_tract_limit(v, r), force_engine(v))
 
 def force_x(v, r):
-    return force_tractive(v, r) - F_aero(v) - F_roll
+    return force_tractive(v, r) - F_drag(v) - F_roll(v)
 
 accel_x = lambda v, r: force_x(v, r) / M

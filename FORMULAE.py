@@ -3,7 +3,7 @@ from VEHICLE import *
 
 def find_apex_speed(r): # Formula for apex speed
     assert isinstance(r, int), "radius must be an integer" 
-    return np.sqrt(force_max / M * r)
+    return np.sqrt(M * G / (M / r - MASS_FACTOR * 1 / 2 * RHO * FRONTAL_AREA * CL))
 
 def travel(v_i, a, dx): # Formula for distance covered using acceleration
     return np.sqrt(v_i ** 2 + 2 * a * dx)
