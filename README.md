@@ -5,7 +5,7 @@
 A Lap Time Simulation requires:
 * Vehicle Modeling
 * Track Modeling
-* Straight Line Simulations
+* Overall Lap Time Simulation
 
 These three aspects sum up to form the full lap time simulation.
 
