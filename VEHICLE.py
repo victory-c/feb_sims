@@ -82,7 +82,7 @@ MOTOR_TORQUE_CURVE = np.array([[0.669972683, 230.2535546],
 
 torque_interp = CubicSpline(MOTOR_TORQUE_CURVE[:, 0], MOTOR_TORQUE_CURVE[:, 1])
 
-# External Forces (assuming no lift)
+# External Forces
 F_m = -1 * M * G
 F_lift = lambda v: 1 / 2 * RHO * FRONTAL_AREA * CL * v ** 2 # lift/downforce
 F_z_total = lambda v: F_m + F_lift(v)
