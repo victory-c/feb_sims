@@ -12,14 +12,12 @@ class Segment:
     apex_speed = 0
 
     def __init__(self, l, r):
-        assert isinstance(l, int), "first argument must be int"
-        assert isinstance(r, int), "second argument must be int"
         self.length = l
-        self.radius = abs(r)
-        if self.radius < 0:
+        if r < 0:
             self.direction = -1
-        elif self.radius > 0:
+        elif r > 0:
             self.direction = 1
+        self.radius = abs(r)
         if self.radius != 0:
             self.apex_speed = find_apex_speed(self.radius)
     

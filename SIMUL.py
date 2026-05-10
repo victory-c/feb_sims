@@ -23,12 +23,12 @@ def negotiate_turns(seg, dx_list):
         if i <= shift + span:
             apex_speed_list[i] = v
         else:
-            v_f = travel(v_f, accel_x(v, 0), dx_list[i])
+            v_f = travel(v_f, accel_x(v_f, 0), dx_list[i])
             apex_speed_list[i] = v_f
     
     v_b = v
     for i in range(shift - 1, -1, -1):
-        v_b = travel(v_b, accel_x(v, 0), dx_list[i])
+        v_b = travel(v_b, decel_x(v_b, 0), -dx_list[i+1])
         apex_speed_list[i] = v_b
     
     return apex_speed_list

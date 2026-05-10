@@ -128,14 +128,16 @@ fig, ax = plt.subplots(nrows = 2, ncols = 4)
 ax[0][1].set(title="Velocity vs. Time",
              xlabel="Time (s)",
              ylabel="Velocity (m/s)")
-ax[0][1].axvline(x=brake_time, color='r', linestyle='--')
+for bt in brake_time:
+    ax[0][1].axvline(x=bt, color='r', linestyle='--')
 ax[0][1].grid()
 ax[0][1].plot(time_list, vels, '-k')
 
 ax[0][0].set(title="Velocity vs. Distance",
              xlabel="Distance (m)",
              ylabel="Velocity (m/s)")
-ax[0][0].axvline(x=brake_point, color='r', linestyle='--')
+for bp in brake_point:
+    ax[0][0].axvline(x=bp, color='r', linestyle='--')
 ax[0][0].grid()
 ax[0][0].plot(nodes, vels, '-b')
 
@@ -146,7 +148,8 @@ ax[0][2].grid()
 ax[0][2].plot(time_list, vel_list[0], 'g', label="Accelerate from Rest")
 ax[0][2].plot(time_list, vel_list[1], 'b', label="Negotiate Turn 1")
 ax[0][2].plot(time_list, vels, 'k', ms=2.5, label = "Final Velocity")
-ax[0][2].axvline(x=brake_time, color='r', linestyle='--')
+for bt in brake_time:
+    ax[0][2].axvline(x=bt, color='r', linestyle='--')
 ax[0][2].legend()
 
 ax[0][3].set(title="Lateral and Longitudinal Acceleration",
@@ -155,7 +158,8 @@ ax[0][3].set(title="Lateral and Longitudinal Acceleration",
 ax[0][3].grid()
 ax[0][3].plot(time_list, lat_long[:, 0], 'b', label="Longitudinal Acceleration")
 ax[0][3].plot(time_list, lat_long[:, 1], 'g', label="Lateral Acceleration")
-ax[0][3].axvline(x=brake_time, color='r', linestyle='--')
+for bt in brake_time:
+    ax[0][3].axvline(x=bt, color='r', linestyle='--')
 ax[0][3].legend()
 
 ax[1][0].set(title="Power Output",
@@ -163,21 +167,24 @@ ax[1][0].set(title="Power Output",
              ylabel="Power (Kw)")
 ax[1][0].grid()
 ax[1][0].plot(time_list, power_list, 'y')
-ax[1][0].axvline(x=brake_time, color='r', linestyle='--')
+for bt in brake_time:
+    ax[1][0].axvline(x=bt, color='r', linestyle='--')
 
 ax[1][1].set(title="Rotations per Minute",
              xlabel="Time (s)",
              ylabel="RPM")
 ax[1][1].grid()
 ax[1][1].plot(time_list, rpm_list, color='pink')
-ax[1][1].axvline(x=brake_time, color='r', linestyle='--')
+for bt in brake_time:
+    ax[1][1].axvline(x=bt, color='r', linestyle='--')
 
 ax[1][2].set(title="Torque",
              xlabel="Time (s)",
              ylabel="Torque (Newton-meters)")
 ax[1][2].grid()
 ax[1][2].plot(time_list, torque_list, color='purple')
-ax[1][2].axvline(x=brake_time, color='r', linestyle='--')
+for bt in brake_time:
+    ax[1][2].axvline(x=bt, color='r', linestyle='--')
 
 ax[1][3].set(title="Drag and Rolling Resistance",
              xlabel="Time (s)",
@@ -185,7 +192,8 @@ ax[1][3].set(title="Drag and Rolling Resistance",
 ax[1][3].grid()
 ax[1][3].plot(time_list, drag_roll_list[:, 0], 'b', label='Drag Force')
 ax[1][3].plot(time_list, drag_roll_list[:, 1], 'g', label='Rolling Resistance')
-ax[1][3].axvline(x=brake_time, color='r', linestyle='--')
+for bt in brake_time:
+    ax[1][3].axvline(x=bt, color='r', linestyle='--')
 ax[1][3].legend()
 
 plt.show()

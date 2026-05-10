@@ -118,7 +118,7 @@ accel_y = lambda v, r: min(force_max(v), force_y(v, r) / M)
 
 
 
-force_tract_limit = lambda v, r: max(0, np.sqrt(force_max(v) ** 2 - force_y(v, r) ** 2))
+force_tract_limit = lambda v, r: np.sqrt(max(0, force_max(v) ** 2 - force_y(v, r) ** 2))
 
 force_tractive = lambda v, r: min(force_tract_limit(v, r), force_engine(v))
 
@@ -126,3 +126,4 @@ def force_x(v, r):
     return force_tractive(v, r) - F_drag(v) - F_roll(v)
 
 accel_x = lambda v, r: force_x(v, r) / M
+decel_x = lambda v, r: -force_max(v) / M
